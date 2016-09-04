@@ -106,37 +106,6 @@ function gup( name, url ) {
 	return results == null ? null : results[1];
 }
 
-function downloadFontCSS(fonturl) {
-	var fontfam = gup('family', fonturl)
-	
-	if (fontfam) {
-		console.log("Font Family to Download: "+fontfam);
-
-		inputdir = 'input/'
-		outputdir = 'output/'
-
-		if (!fs.existsSync(inputdir)) {
-			fs.mkdir(inputdir)
-		}
-
-		if (!fs.existsSync(outputdir)) {
-			fs.mkdir(outputdir)
-		}
-		
-		download(fonturl, inputdir+fontfam, function(srcurl, destfile, err) {
-			if (err) { 
-				console.log("ERROR: "+err)
-			} else {
-				console.log('Downloaded CSS: '+destfile)
-				inputcss = String(fs.readFileSync(inputdir+'/'+fontfam))
-				obj = css.parse(inputcss);
-
-				parseFontCSS()
-			}
-		})
-	}
-}
-
 function makeTestPage(fontname, css, fontfile) {
 	html = '<title>'+fontname+'</title>\n'
 	html = '<style type="text/css">\n'
@@ -153,6 +122,38 @@ function makeTestPage(fontname, css, fontfile) {
 	htmlfilename = 'output/'+fontname+'/index.htm'
 	fs.writeFileSync(htmlfilename, html, 'utf8');
 	console.log('Created font test file: '+htmlfilename)
+}
+
+function downloadFontCSS(fonturl) {
+	var fontfam = gup('family', fonturl)
+	
+	if (fontfam) {
+		console.log("Font Family to Download: "+fontfam);
+
+		inputdir = 'input/'
+		outputdir = 'output/'
+		cssfile = inputdir+fontfam+'.css'
+
+		if (!fs.existsSync(inputdir)) {
+			fs.mkdir(inputdir)
+		}
+
+		if (!fs.existsSync(outputdir)) {
+			fs.mkdir(outputdir)
+		}
+		
+		download(fonturl, cssfile, function(srcurl, destfile, err) {
+			if (err) { 
+				console.log("ERROR: "+err)
+			} else {
+				console.log('Downloaded CSS: '+cssfile)
+				inputcss = String(fs.readFileSync(cssfile))
+				obj = css.parse(inputcss);
+
+				parseFontCSS()
+			}
+		})
+	}
 }
 
 if (process.argv[2]) {
