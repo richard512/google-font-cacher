@@ -1,12 +1,12 @@
 # google-font-cacher
 Downloads a local cache of Google Fonts with NodeJS
 
-Usage example:
+**Usage example:**
 ```
 nodejs gfontget.js "https://fonts.googleapis.com/css?family=Open+Sans"
 ```
 
-Example output:
+**Example output:**
 
 ```input/Open+Sans.css``` The original CSS file
 
